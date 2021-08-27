@@ -15,6 +15,7 @@
       <div class="col-md-6">
         <!-- 最新評論 NewestComments-->
         <h3>最新評論</h3>
+        <NewestComments :comments="comments"/>
       </div>
     </div>
   </div>
@@ -23,6 +24,7 @@
 <script>
 import NavTabs from '../component/NavTabs.vue'
 import NewestRestaurants from '../component/NewestRestaurants.vue'
+import NewestComments from '../component/NewestComments.vue'
 
 const dummyData = {
     "restaurants": [
@@ -536,11 +538,12 @@ export default {
   components: {
     NavTabs,
     NewestRestaurants,
+    NewestComments,
   },
   data() {
     return {
       restaurants: [],
-      comment: [],
+      comments: [],
     }
   },
   created() {
@@ -549,8 +552,10 @@ export default {
   },
   methods: {
     fetchFeeds() {
-      this.restaurants = dummyData.restaurants
-      this.comment = dummyData.comments
+      const { restaurants, comments} = dummyData
+      this.restaurants = restaurants
+      //過濾掉 無此餐廳&無評論 的狀況
+      this.comments = comments.filter( comment => comment.Restaurant && comment.text)
     }
   }
 }
