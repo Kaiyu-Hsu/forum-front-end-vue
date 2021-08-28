@@ -3,6 +3,9 @@
     <!-- 使用 NavTabs 元件 -->
     <NavTabs />
     <!-- 餐廳類別標籤 RestaurantsNavPills -->
+    <RestaurantsNavPills
+     :categories="categories"
+    />
 
     <div class="row">
       <!-- 餐廳卡片 RestaurantCard-->
@@ -20,6 +23,7 @@
 <script>
 import NavTabs from "../component/NavTabs.vue";
 import RestaurantCard from "../component/RestaurantCard.vue";
+import RestaurantsNavPills from "../component/RestaurantsNavPills.vue";
 
 const dummyData = {
   restaurants: [
@@ -299,6 +303,7 @@ export default {
   components: {
     NavTabs,
     RestaurantCard,
+    RestaurantsNavPills,
   },
   data() {
     return {
