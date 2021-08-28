@@ -23,7 +23,8 @@
 </template>
 
 <script>
-import moment from 'moment'
+// import moment from 'moment'
+import { fromNowFilter } from '../utils/mixins'
 
 const dummyUser = {
   currentUser: {
@@ -48,11 +49,12 @@ export default {
       currentUser: dummyUser.currentUser,
     };
   },
-  filters: {
-    fromNow(dateTime) {
-        if(!dateTime) return '-'
-        return moment(dateTime).fromNow()
-    }
-  },
+  mixins: [fromNowFilter],
+//   filters: {
+//     fromNow(dateTime) {
+//         if(!dateTime) return '-'
+//         return moment(dateTime).fromNow()
+//     }
+//   },
 };
 </script>
