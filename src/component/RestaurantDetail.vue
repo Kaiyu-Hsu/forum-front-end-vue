@@ -70,10 +70,15 @@
 <script>
 export default {
   props: {
-    restaurant: {
-      type: Array,
+    initialRestaurant: {
+      type: Object,
       required: true,
     },
+  },
+  data() {
+    return {
+      restaurant: this.initialRestaurant,
+    };
   },
   methods: {
     addFavorite() {

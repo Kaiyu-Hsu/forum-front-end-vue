@@ -3,7 +3,7 @@
     <h1>餐廳描述頁</h1>
     <!-- 餐廳資訊頁 RestaurantDetail -->
     <RestaurantDetail 
-     :restaurant="restaurant"
+     :initial-restaurant="restaurant"
      />
     <hr />
     <!-- 餐廳評論 RestaurantComments -->
