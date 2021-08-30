@@ -12,8 +12,10 @@
           <!-- <small>{{ restaurant.Category ? restaurant.Category.name : "未分類" }}</small> -->
         </h4>
         <p>{{ comment.text }}</p>
-        by <a href="#">user{{ comment.User.name }}</a> at
-        {{ comment.User.createdAt | fromNow }}
+        by <router-link :to="{ name:'user', params: { id: comment.UserId }}">
+          user{{ comment.User.name }}
+          </router-link> 
+          at {{ comment.User.createdAt | fromNow }}
         <hr />
       </div>
     </div>
