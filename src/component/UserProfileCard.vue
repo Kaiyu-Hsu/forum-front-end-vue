@@ -74,7 +74,7 @@ export default {
   },
   data() {
     return {
-      prfile: this.initialProfile,
+      profile: this.initialProfile,
       currentUser: dummyUser.currentUser
     };
   },
