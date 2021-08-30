@@ -61,6 +61,7 @@ const dummyUser = {
     email: "root@example.com",
     image: "https://i.imgur.com/WMsHuNP.jpeg",
     isAdmin: true,
+    // isAdmin: false,
   },
   isAuthenticated: true,
 }
@@ -80,14 +81,14 @@ export default {
   },
   methods: {
     addFollowing() {
-      this.prfile = {
-        ...this.prfile,
+      this.profile = {
+        ...this.profile,
         isFollowed: true,
       };
     },
     deleteFollowing() {
-      this.prfile = {
-        ...this.prfile,
+      this.profile = {
+        ...this.profile,
         isFollowed: false,
       };
     },
