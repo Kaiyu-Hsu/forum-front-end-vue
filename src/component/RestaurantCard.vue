@@ -10,9 +10,11 @@
       />
       <div class="card-body">
         <p class="card-text title-wrap">
-          <a href="#">
+          <router-link
+            :to="{ name: 'restaurant', params: { id: restaurant.id } }"
+          >
             {{ restaurant.name }}
-          </a>
+          </router-link>
         </p>
         <span class="badge badge-secondary">{{
           restaurant.Category.name
@@ -46,7 +48,12 @@
         >
           Unlike
         </button>
-        <button v-else @click.stop.prevent="addLiked" type="button" class="btn btn-primary like mr-2">
+        <button
+          v-else
+          @click.stop.prevent="addLiked"
+          type="button"
+          class="btn btn-primary like mr-2"
+        >
           Like
         </button>
       </div>
@@ -68,30 +75,30 @@ export default {
     };
   },
   methods: {
-      addFavorite() {
-          this.restaurant = {
-              ...this.restaurant,  // 保留餐廳內原有資料
-              isFavorited: true,
-          }
-      },
-      deleteFavorite() {
-          this.restaurant = {
-              ...this.restaurant,  
-              isFavorited: false,
-          }
-      },
-      addLiked() {
-          this.restaurant = {
-              ...this.restaurant,  
-              isLiked: true,
-          }
-      },
-      deleteLiked() {
-          this.restaurant = {
-              ...this.restaurant,  
-              isLiked: false,
-          }
-      },
-  }
+    addFavorite() {
+      this.restaurant = {
+        ...this.restaurant, // 保留餐廳內原有資料
+        isFavorited: true,
+      };
+    },
+    deleteFavorite() {
+      this.restaurant = {
+        ...this.restaurant,
+        isFavorited: false,
+      };
+    },
+    addLiked() {
+      this.restaurant = {
+        ...this.restaurant,
+        isLiked: true,
+      };
+    },
+    deleteLiked() {
+      this.restaurant = {
+        ...this.restaurant,
+        isLiked: false,
+      };
+    },
+  },
 };
 </script>
