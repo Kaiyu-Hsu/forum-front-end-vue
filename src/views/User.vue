@@ -2,23 +2,22 @@
   <div class="album py-5 bg-light">
     <div class="container">
       <!-- User profile Card -->
-      <UserProfileCard 
-      :initial-profile="profile" />
+      <UserProfileCard :initial-profile="profile" />
       <div class="row">
         <div class="col-md-4">
           <!-- User Following Card -->
-          <UserFollowingsCard />
+          <UserFollowingsCard :followings="followings" />
           <br />
           <!-- User Followers Card -->
-          <UserFollowersCard />
+          <UserFollowersCard :followers="followers" />
         </div>
         <div class="col-md-8">
           <!-- User Comments Card -->
-          <UserCommentsCard />
+          <UserCommentsCard :comments="comments" />
           <br />
           <!-- User Favorite Restaurant Card -->
           <UserFavoritedRestaurantsCard
-            
+            :favoritedRestaurants="favoritedRestaurants"
           />
         </div>
       </div>
@@ -1521,10 +1520,10 @@ export default {
         name: "",
         email: "",
         image: "",
-        Comments: [],
-        FavoritedRestaurants: [],
-        Followers: [],
-        Followings: [],
+        comments: [],
+        favoritedRestaurants: [],
+        followers: [],
+        followings: [],
         isFollowed: true,
       },
     };
@@ -1542,15 +1541,23 @@ export default {
         Followings,
         isFollowed,
       } = dummyData.profile;
-      this.profile.id = id;
-      this.profile.name = name;
-      this.profile.email = email;
-      this.profile.image = image;
-      this.profile.Comments = Comments;
-      this.profile.FavoritedRestaurants = FavoritedRestaurants;
-      this.profile.Followers = Followers;
-      this.profile.Followings = Followings;
-      this.isFollowed = isFollowed;
+
+      this.profile = {
+        ...this.profile,
+        id,
+        name,
+        email,
+        image,
+        comments: Comments,
+        favoritedRestaurants: FavoritedRestaurants,
+        followers: Followers,
+        followings: Followings,
+        isFollowed,
+      };
+      this.followings = this.profile.followings;
+      this.followers = this.profile.followers;
+      this.comments = this.profile.comments;
+      this.favoritedRestaurants = this.profile.favoritedRestaurants;
     },
   },
   created() {

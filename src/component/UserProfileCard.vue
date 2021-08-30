@@ -10,18 +10,18 @@
           <p class="card-text">{{ profile.email }}</p>
           <ul class="list-unstyled list-inline">
             <li>
-              <strong>{{ profile.Comments.length }}</strong> 已評論餐廳
+              <strong>{{ profile.comments.length }}</strong> 已評論餐廳
             </li>
             <li>
-              <strong>{{ profile.FavoritedRestaurants.length }}</strong>
+              <strong>{{ profile.favoritedRestaurants.length }}</strong>
               收藏的餐廳
             </li>
             <li>
-              <strong>{{ profile.Followings.length }}</strong> followings
+              <strong>{{ profile.followings.length }}</strong> followings
               (追蹤者)
             </li>
             <li>
-              <strong>{{ profile.Followers.length }}</strong> followers (追隨者)
+              <strong>{{ profile.followers.length }}</strong> followers (追隨者)
             </li>
           </ul>
           <p>
