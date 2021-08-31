@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import { emptyImageFilter } from '../utils/mixins'
+
 const dummyData = {
   restaurant: {
     id: 4,
@@ -67,6 +69,7 @@ const dummyData = {
 
 export default {
   name: 'AdminRestaurant',
+  mixins: [emptyImageFilter],
   data() {
     return {
       restaurant: {
