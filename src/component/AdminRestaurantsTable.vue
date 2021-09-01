@@ -22,11 +22,22 @@
             >Show
           </router-link>
 
-          <a href="#" class="btn btn-link">Edit</a>
+          <router-link
+            :to="{
+              name: 'admin-restaurant-edit',
+              params: { id: restaurant.id },
+            }"
+            class="btn btn-link"
+            >Edit</router-link
+          >
 
-          <button 
-           @click="deleteRestaurant(restaurant.id)"
-          type="button" class="btn btn-link">Delete</button>
+          <button
+            @click="deleteRestaurant(restaurant.id)"
+            type="button"
+            class="btn btn-link"
+          >
+            Delete
+          </button>
         </td>
       </tr>
     </tbody>
@@ -1014,8 +1025,10 @@ export default {
       this.restaurants = dummyData.restaurants;
     },
     deleteRestaurant(restaurantId) {
-      this.restaurants = this.restaurants.filter( restaurant => restaurant.id !== restaurantId)
-    }
+      this.restaurants = this.restaurants.filter(
+        (restaurant) => restaurant.id !== restaurantId
+      );
+    },
   },
   created() {
     return this.fetchRestaurants();
