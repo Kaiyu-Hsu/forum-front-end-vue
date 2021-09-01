@@ -26,7 +26,11 @@
           </ul>
           <p>
             <template v-if="currentUser.isAdmin">
-              <button class="btn btn-primary">edit</button>
+              <router-link 
+              :to="{ name:'user-edit', params: { id: profile.id }}"
+              class="btn btn-primary">
+                edit
+                </router-link>
             </template>
             <template v-else>
               <button
