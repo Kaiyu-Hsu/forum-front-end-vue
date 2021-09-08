@@ -61,13 +61,6 @@ export default {
   },
   methods: {
     handleSubmit() {
-      // const data = JSON.stringify({
-      //     email: this.email,
-      //     password: this.password
-      // })
-
-      // // TODO: 向後端驗證使用者登入資訊是否合法
-      // console.log('data', data)
       authorizationAPI
         .signIn({
           email: this.email,
