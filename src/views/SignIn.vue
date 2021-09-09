@@ -69,6 +69,10 @@ export default {
         .then(response => {
           // 取得 API 請求後的資料
           const { data } = response
+          //設定判斷方式
+          if( data.status !== 'success') {
+            throw new Error (data.message)
+          }
           // 將 token 存放在 localStorage 內
           localStorage.setItem('token', data.token)
           // 成功登入後轉址到餐廳首頁
