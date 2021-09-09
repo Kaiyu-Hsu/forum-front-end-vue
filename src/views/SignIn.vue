@@ -34,7 +34,9 @@
         />
       </div>
 
-      <button class="btn btn-lg btn-primary btn-block mb-3" type="submit">
+      <button 
+      :disabled="isProcessing"
+      class="btn btn-lg btn-primary btn-block mb-3" type="submit">
         Submit
       </button>
 
@@ -58,6 +60,7 @@ export default {
     return {
       email: "",
       password: "",
+      isProcessing: false
     };
   },
   methods: {
@@ -72,6 +75,8 @@ export default {
 
         return;
       }
+
+      this.isProcessing = true
 
       authorizationAPI
         .signIn({
@@ -94,6 +99,8 @@ export default {
         .catch((error) => {
           // 將密碼欄位清空
           this.password = "";
+          // 因為登入失敗，所以要把按鈕狀態還原
+          this.isProcessing = false
           // 顯示錯誤提示
           Toast.fire({
             icon: "warning",
