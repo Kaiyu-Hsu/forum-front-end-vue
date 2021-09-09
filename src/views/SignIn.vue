@@ -34,7 +34,11 @@
         />
       </div>
 
-      <button class="btn btn-lg btn-primary btn-block mb-3" type="submit">
+      <button
+        :disabled="isProcessing"
+        class="btn btn-lg btn-primary btn-block mb-3"
+        type="submit"
+      >
         Submit
       </button>
 
@@ -51,29 +55,64 @@
 
 <script>
 import authorizationAPI from "../apis/authorization";
+import { Toast } from "../utils/helpers";
 
 export default {
   data() {
     return {
       email: "",
       password: "",
+      isProcessing: false,
     };
   },
   methods: {
-    handleSubmit() {
-      authorizationAPI
-        .signIn({
+    async handleSubmit(e) {
+      try {
+        // 如果 email 或 password 為空，則使用 Toast 提示
+        // 然後 return 不繼續往後執行
+        if (!this.email || !this.password) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填入 email 和 password",
+          });
+
+          return;
+        }
+
+        this.isProcessing = true;
+
+        const response = await authorizationAPI.signIn({
           email: this.email,
           password: this.password,
-        })
-        .then(response => {
-          // 取得 API 請求後的資料
-          const { data } = response
-          // 將 token 存放在 localStorage 內
-          localStorage.setItem('token', data.token)
-          // 成功登入後轉址到餐廳首頁
-          this.$router.push('/restaurants')
         });
+
+        // 取得 API 請求後的資料
+        const { data } = response;
+        console.log("response", response);
+
+        // 設定判斷方式
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        
+        // 將 token 存放在 localStorage 內
+        localStorage.setItem("token", data.token);
+        // 成功登入後轉址到餐廳首頁
+        this.$router.push("/restaurants");
+
+      } catch (error) {
+        // 將密碼欄位清空
+        this.password = "";
+        // 因為登入失敗，所以要把按鈕狀態還原
+        this.isProcessing = false;
+        // 顯示錯誤提示
+        Toast.fire({
+          icon: "warning",
+          title: "請確認您輸入了正確的帳號密碼",
+        });
+
+        console.log("error", error);
+      }
     },
   },
 };
