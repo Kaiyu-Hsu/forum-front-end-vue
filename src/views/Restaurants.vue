@@ -61,7 +61,7 @@ export default {
           page: queryPage,
           categoryId: queryCategoryId,
         });
-        console.log("response", response);
+        // console.log("response", response);
 
         // 透過解構賦值，將所需要的資料從 response.data 取出
         const {
@@ -95,9 +95,16 @@ export default {
   created() {
     // 向伺服器請求第一頁且不分餐廳類別的資料
     this.fetchRestaurants({
-      queryPage: 1,
+      queryPage: "",
       queryCategoryId: "",
     });
   },
+  beforeRouteUpdate(to, from, next) {
+    // console.log("beforeRouteUpdate", {to, from})
+    // 避免撈到 undefined 字串
+    const { page = '', categoryId = '' } = to.query
+    this.fetchRestaurants({ queryPage:page, queryCategoryId:categoryId })
+    next()
+  }
 };
 </script>
