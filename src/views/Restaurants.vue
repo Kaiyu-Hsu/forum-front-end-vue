@@ -61,7 +61,6 @@ export default {
           page: queryPage,
           categoryId: queryCategoryId,
         });
-        // console.log("response", response);
 
         // 透過解構賦值，將所需要的資料從 response.data 取出
         const {
@@ -93,7 +92,6 @@ export default {
     },
   },
   created() {
-    // console.log(this.$route.query)
     // 以複製進來的網址來搜尋參數並渲染畫面
     const { page = '', categoryId = '' } = this.$route.query
     this.fetchRestaurants({ queryPage:page, queryCategoryId:categoryId })
@@ -104,10 +102,9 @@ export default {
     });
   },
   beforeRouteUpdate(to, from, next) {
-    // console.log("beforeRouteUpdate", {to, from})
     // 避免撈到 undefined 字串
     const { page = '', categoryId = '' } = to.query
-    this.fetchRestaurants({ queryPage:page, queryCategoryId:categoryId })
+    this.fetchRestaurants({ queryPage: page, queryCategoryId: categoryId })
     next()
   }
 };
