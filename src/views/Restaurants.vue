@@ -93,6 +93,10 @@ export default {
     },
   },
   created() {
+    // console.log(this.$route.query)
+    // 以複製進來的網址來搜尋參數並渲染畫面
+    const { page = '', categoryId = '' } = this.$route.query
+    this.fetchRestaurants({ queryPage:page, queryCategoryId:categoryId })
     // 向伺服器請求第一頁且不分餐廳類別的資料
     this.fetchRestaurants({
       queryPage: "",
