@@ -42,7 +42,7 @@
         </button>
         <button
           v-if="restaurant.isLiked"
-          @click.stop.prevent="deleteLiked"
+          @click.stop.prevent="deleteLiked(restaurant.id)"
           type="button"
           class="btn btn-danger like mr-2"
         >
@@ -50,7 +50,7 @@
         </button>
         <button
           v-else
-          @click.stop.prevent="addLiked"
+          @click.stop.prevent="addLiked(restaurant.id)"
           type="button"
           class="btn btn-primary like mr-2"
         >
@@ -121,17 +121,45 @@ export default {
         console.log('error', error)
       }
     },
-    addLiked() {
-      this.restaurant = {
+    async addLiked(restaurantId) {
+      try {
+        const { data } = await usersAPI.addLiked({ restaurantId })
+
+        if( data.status !== "success" ) {
+          throw new Error(data.message)
+        }
+
+        this.restaurant = {
         ...this.restaurant,
         isLiked: true,
-      };
+        };
+
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法按Like，請稍後再試",
+        });
+      }
     },
-    deleteLiked() {
-      this.restaurant = {
+    async deleteLiked(restaurantId) {
+      try {
+        const { data } = await usersAPI.deleteLiked({ restaurantId })
+
+        if( data.status !== "success" ) {
+          throw new Error(data.message)
+        }
+
+        this.restaurant = {
         ...this.restaurant,
         isLiked: false,
-      };
+        };
+
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法按Unlike，請稍後再試",
+        });
+      }
     },
   },
 };
