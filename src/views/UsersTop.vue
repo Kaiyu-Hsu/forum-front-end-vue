@@ -3,9 +3,7 @@
     <NavTabs />
     <h1 class="mt-5">美食達人</h1>
     <hr />
-    <div class="row text-center">
-      <UserCards v-for="user in users" :key="user.id" :initial-user="user" />
-    </div>
+    <UserCards :initial-users="users" />
   </div>
 </template>
 
@@ -38,7 +36,6 @@ export default {
           followerCount: user.followerCount,
           isFollowed: user.isFollowed,
         }));
-        
       } catch (error) {
         console.log("error", error);
         Toast.fire({
