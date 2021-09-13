@@ -3,7 +3,9 @@
     <NavTabs />
     <h1 class="mt-5">美食達人</h1>
     <hr />
-    <UserCards :initial-users="users" />
+    <div class="row text-center">
+      <UserCards v-for="user in users" :key="user.id" :initial-user="user" />
+    </div>
   </div>
 </template>
 
@@ -33,7 +35,7 @@ export default {
           id: user.id,
           name: user.id,
           image: user.image,
-          followerCount: user.followerCount,
+          followerCount: user.FollowerCount,
           isFollowed: user.isFollowed,
         }));
       } catch (error) {
