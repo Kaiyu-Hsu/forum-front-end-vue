@@ -10,7 +10,7 @@
     <p class="mt-3">
       <button
         v-if="user.isFollowed"
-        @click.stop.prevent="deleteFollowed"
+        @click.stop.prevent="deleteFollowed(user.id)"
         type="button"
         class="btn btn-danger"
       >
@@ -18,7 +18,7 @@
       </button>
       <button
         v-else
-        @click.stop.prevent="addFollowed"
+        @click.stop.prevent="addFollowed(user.id)"
         type="button"
         class="btn btn-primary"
       >
@@ -30,18 +30,15 @@
 
 <script>
 import { emptyImageFilter } from "../utils/mixins";
-// import userAPI from "./../apis/users";
-// import { Toast } from "./../utils/helpers";
+import userAPI from "./../apis/users";
+import { Toast } from "./../utils/helpers";
 
 export default {
   mixins: [emptyImageFilter],
   props: {
     initialUser: {
-      type: Array,
+      type: Object,
       reuired: true,
-      default: () => ({
-        followerCount: 0,
-      })
     },
   },
   data() {
@@ -50,47 +47,49 @@ export default {
     };
   },
   methods: {
-    // async addFollowed(userId) {
-    //   try {
-    //     const { data } = await userAPI.addFollowed({ userId });
+    async addFollowed(userId) {
+      try {
+        const { data } = await userAPI.addFollowed({ userId });
 
-    //     if (data.status !== "success") {
-    //       throw new Error(data.message);
-    //     }
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
 
-    //     this.users = this.users.map((user) => {
-    //       if (user.id !== userId) {
-    //         return user;
-    //       } else {
-    //         return {
-    //           ...user,
-    //           followerCount: user.followerCount + 1,
-    //           isFollowed: true,
-    //         };
-    //       }
-    //     });
+        this.user = {
+          ...this.user,
+          followerCount: this.user.followerCount + 1,
+          isFollowed: true,
+        };
 
-    //   } catch (error) {
-    //     console.log(error);
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: "暫時無法追蹤，請稍後",
-    //     });
-    //   }
-    // },
-    addFollowed() {
-      this.user = {
-        ...this.user,
-        followerCount: this.user.followerCount + 1,
-        isFollowed: true,
-      };
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法追蹤，請稍後",
+        });
+      }
     },
-    deleteFollowed() {
-      this.user = {
-        ...this.user,
-        followerCount: this.user.followerCount - 1,
-        isFollowed: false,
-      };
+    async deleteFollowed(userId) {
+      try {
+        const { data } = await userAPI.deleteFollowed({ userId });
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        this.user = {
+          ...this.user,
+          followerCount: this.user.followerCount - 1,
+          isFollowed: false,
+        }
+        
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "error",
+          title: "暫時無法取消追蹤，請稍後",
+        });
+      }
     },
   },
 };
