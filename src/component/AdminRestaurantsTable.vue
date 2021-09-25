@@ -45,6 +45,9 @@
 </template>
 
 <script>
+import adminAPI from "./../apis/admin.js";
+import { Toast } from "./../utils/helpers.js";
+
 const dummyData = {
   restaurants: [
     {
@@ -1021,17 +1024,39 @@ export default {
     };
   },
   methods: {
-    fetchRestaurants() {
-      this.restaurants = dummyData.restaurants;
+    async fetchRestaurants() {
+      try {
+        const { data } = await adminAPI.restaurants.get();
+        console.log(data);
+
+        this.restaurants = data.restaurants;
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入餐廳資料",
+        });
+      }
     },
-    deleteRestaurant(restaurantId) {
-      this.restaurants = this.restaurants.filter(
-        (restaurant) => restaurant.id !== restaurantId
-      );
+    async deleteRestaurant(restaurantId) {
+      try {
+        const { data } = await adminAPI.restaurants.delete(restaurantId);
+        console.log(data);
+
+        this.restaurants = this.restaurants.filter(
+          (restaurant) => restaurant.id !== restaurantId
+        );
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法刪除餐廳資料",
+        });
+      }
     },
   },
   created() {
-    return this.fetchRestaurants();
+    this.fetchRestaurants();
   },
 };
 </script>
