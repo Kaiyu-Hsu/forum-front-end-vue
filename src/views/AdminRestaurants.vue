@@ -2,10 +2,7 @@
   <div class="container py-5">
     <!-- 後台導覽頁籤 AdminNav -->
     <AdminNav />
-    <router-link
-      to="/admin/restaurants/new"
-      class="btn btn-primary mb-4"
-    >
+    <router-link to="/admin/restaurants/new" class="btn btn-primary mb-4">
       New Restaurant
     </router-link>
 
@@ -15,14 +12,14 @@
 </template>
 
 <script>
-import AdminNav from '../component/AdminNav.vue'
-import AdminRestaurantsTable from '../component/AdminRestaurantsTable.vue'
+import AdminNav from "../component/AdminNav.vue";
+import AdminRestaurantsTable from "../component/AdminRestaurantsTable.vue";
 
 export default {
-  name: 'AdminRestaurants',
+  name: "AdminRestaurants",
   components: {
     AdminNav,
     AdminRestaurantsTable,
   },
-}
+};
 </script>
