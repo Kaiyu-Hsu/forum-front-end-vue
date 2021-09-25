@@ -103,52 +103,8 @@
 </template>
 
 <script>
-const dummyData = {
-  categories: [
-    {
-      id: 1,
-      name: "中式料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-08-09T07:00:13.000Z",
-    },
-    {
-      id: 2,
-      name: "日本料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-08-09T07:00:29.000Z",
-    },
-    {
-      id: 3,
-      name: "義大利料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-07-05T09:58:39.000Z",
-    },
-    {
-      id: 4,
-      name: "墨西哥料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-07-05T09:58:39.000Z",
-    },
-    {
-      id: 5,
-      name: "素食料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-07-05T09:58:39.000Z",
-    },
-    {
-      id: 6,
-      name: "美式料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-07-05T09:58:39.000Z",
-    },
-    {
-      id: 7,
-      name: "複合式料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-07-05T09:58:39.000Z",
-    },
-  ],
-};
+import adminAPI from "./../apis/admin.js";
+import { Toast } from "./../utils/helpers.js";
 
 export default {
   props: {
@@ -162,8 +118,8 @@ export default {
         description: "",
         image: "",
         categoryId: "",
-      })
-    }
+      }),
+    },
   },
   data() {
     return {
@@ -180,8 +136,19 @@ export default {
     };
   },
   methods: {
-    fetchCategories() {
-      this.categories = dummyData.categories;
+    async fetchCategories() {
+      try {
+        const { data } = await adminAPI.categories.get();
+        console.log(data);
+
+        this.categories = data.categories;
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入餐廳類別",
+        });
+      }
     },
     handleFileChange(e) {
       const files = e.target.files;
@@ -205,8 +172,8 @@ export default {
     this.fetchCategories();
     this.restaurant = {
       ...this.restaurant,
-      ...this.initialRestaurant
-    }
+      ...this.initialRestaurant,
+    };
   },
 };
 </script>
