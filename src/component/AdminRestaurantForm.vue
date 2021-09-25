@@ -1,5 +1,5 @@
 <template>
-  <form @submit.stop.prevent="handleSubmit">
+  <form @submit.stop.prevent="handleSubmit" v-show="!isLoading">
     <div class="form-group">
       <label for="name">Name</label>
       <input
@@ -98,7 +98,9 @@
       />
     </div>
 
-    <button type="submit" class="btn btn-primary">送出</button>
+    <button type="submit" class="btn btn-primary" :disabled="isProcessing">
+      {{ isProcessing ? "處理中..." : "送出" }}
+    </button>
   </form>
 </template>
 
@@ -120,6 +122,10 @@ export default {
         categoryId: "",
       }),
     },
+    isProcessing: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
@@ -133,6 +139,7 @@ export default {
         openingHours: "",
       },
       categories: [],
+      isLoading: true,
     };
   },
   methods: {
@@ -142,7 +149,9 @@ export default {
         // console.log(data);
 
         this.categories = data.categories;
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
         console.log(error);
         Toast.fire({
           icon: "warning",
@@ -162,10 +171,43 @@ export default {
         this.restaurant.image = imageURL;
       }
     },
-    handleSubmit(e) {
-      const from = e.target;
-      const fromData = new FormData(from);
-      this.$emit("after-submit", fromData);
+    async handleSubmit(e) {
+      try {
+        // 加上判斷式來避免使用者漏填
+        if (!this.restaurant.name) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填寫餐廳名稱",
+          });
+          return;
+        } else if (!this.restaurant.categoryId) {
+          Toast.fire({
+            icon: "warning",
+            title: "請選擇餐廳類別",
+          });
+          return;
+        }
+
+        const form = e.target;
+        const formData = new FormData(form);
+        this.$emit("after-submit", formData);
+
+        // 透過 restaurants.create 方法來向伺服器建立餐廳
+        const { data } = await adminAPI.restaurants.create({ formData });
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        // 成功的話則轉址到 `/admin/restaurants`
+        this.$router.push({ name: "admin-restaurants" });
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法新增餐廳",
+        });
+      }
     },
   },
   created() {
