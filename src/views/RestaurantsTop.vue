@@ -36,7 +36,7 @@ export default {
     async fetchData() {
       try {
         const response = await TopAPI.getTop();
-        console.log(response);
+        // console.log(response);
 
         this.restaurants = response.data.restaurants;
       } catch (error) {
