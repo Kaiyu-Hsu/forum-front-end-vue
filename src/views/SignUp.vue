@@ -79,25 +79,72 @@
 </template>
 
 <script>
+import authorizationAPI from "./../apis/authorization.js";
+import { Toast } from "./../utils/helpers.js";
+
 export default {
+  name: "signUp",
   data() {
     return {
-      name: '',
-      email: '',
-      password: '',
-      passwordCheck: '',
-    }
+      name: "",
+      email: "",
+      password: "",
+      passwordCheck: "",
+    };
   },
   methods: {
-    handleSubmit() {
-      const data = JSON.stringify({
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        passwordCheck: this.passwordCheck,
-      });
+    async handleSubmit(e) {
+      if (!this.name) {
+        Toast.fire({
+          icon: "warning",
+          title: "請填寫名稱",
+        });
+        return;
+      } else if (!this.email) {
+        Toast.fire({
+          icon: "warning",
+          title: "請填寫email",
+        });
+        return;
+      } else if (!this.password) {
+        Toast.fire({
+          icon: "warning",
+          title: "請填寫密碼",
+        });
+        return;
+      } else if (this.password !== this.passwordCheck) {
+        Toast.fire({
+          icon: "warning",
+          title: "請確認密碼是否一致",
+        });
+        return;
+      }
 
-      console.log('data', data)
+      try {
+        const { data } = await authorizationAPI.signUp({
+          name: this.name,
+          email: this.email,
+          password: this.password,
+          passwordCheck: this.passwordCheck,
+        });
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        Toast.fire({
+          icon: "success",
+          title: "註冊成功",
+        });
+
+        this.$router.push({ name: "sign-in" });
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法註冊",
+        });
+      }
     },
   },
 };
