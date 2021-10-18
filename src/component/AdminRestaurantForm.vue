@@ -1,5 +1,5 @@
 <template>
-  <form @submit.stop.prevent="handleSubmit">
+  <form @submit.stop.prevent="handleSubmit" v-show="!isLoading">
     <div class="form-group">
       <label for="name">Name</label>
       <input
@@ -98,57 +98,15 @@
       />
     </div>
 
-    <button type="submit" class="btn btn-primary">送出</button>
+    <button type="submit" class="btn btn-primary" :disabled="isProcessing">
+      {{ isProcessing ? "處理中..." : "送出" }}
+    </button>
   </form>
 </template>
 
 <script>
-const dummyData = {
-  categories: [
-    {
-      id: 1,
-      name: "中式料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-08-09T07:00:13.000Z",
-    },
-    {
-      id: 2,
-      name: "日本料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-08-09T07:00:29.000Z",
-    },
-    {
-      id: 3,
-      name: "義大利料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-07-05T09:58:39.000Z",
-    },
-    {
-      id: 4,
-      name: "墨西哥料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-07-05T09:58:39.000Z",
-    },
-    {
-      id: 5,
-      name: "素食料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-07-05T09:58:39.000Z",
-    },
-    {
-      id: 6,
-      name: "美式料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-07-05T09:58:39.000Z",
-    },
-    {
-      id: 7,
-      name: "複合式料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-07-05T09:58:39.000Z",
-    },
-  ],
-};
+import adminAPI from "./../apis/admin.js";
+import { Toast } from "./../utils/helpers.js";
 
 export default {
   props: {
@@ -162,26 +120,38 @@ export default {
         description: "",
         image: "",
         categoryId: "",
-      })
-    }
+      }),
+    },
+    isProcessing: {
+      type: Boolean,
+      default: false,
+    },
   },
   data() {
     return {
       restaurant: {
-        name: "",
-        categoryId: "",
-        tel: "",
-        address: "",
-        description: "",
-        image: "",
-        openingHours: "",
+        ...this.initialRestaurant,
       },
       categories: [],
+      isLoading: true,
     };
   },
   methods: {
-    fetchCategories() {
-      this.categories = dummyData.categories;
+    async fetchCategories() {
+      try {
+        const { data } = await adminAPI.categories.get();
+        // console.log(data);
+
+        this.categories = data.categories;
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        console.log(error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法載入餐廳類別",
+        });
+      }
     },
     handleFileChange(e) {
       const files = e.target.files;
@@ -195,18 +165,55 @@ export default {
         this.restaurant.image = imageURL;
       }
     },
-    handleSubmit(e) {
-      const from = e.target;
-      const fromData = new FormData(from);
-      this.$emit("after-submit", fromData);
+    async handleSubmit(e) {
+      try {
+        // 加上判斷式來避免使用者漏填
+        if (!this.restaurant.name) {
+          Toast.fire({
+            icon: "warning",
+            title: "請填寫餐廳名稱",
+          });
+          return;
+        } else if (!this.restaurant.categoryId) {
+          Toast.fire({
+            icon: "warning",
+            title: "請選擇餐廳類別",
+          });
+          return;
+        }
+
+        const form = e.target;
+        const formData = new FormData(form);
+        this.$emit("after-submit", formData);
+
+        // 透過 restaurants.create 方法來向伺服器建立餐廳
+        const { data } = await adminAPI.restaurants.create({ formData });
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        // 成功的話則轉址到 `/admin/restaurants`
+        this.$router.push({ name: "admin-restaurants" });
+      } catch (error) {
+        console.log(error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法新增餐廳",
+        });
+      }
     },
   },
   created() {
     this.fetchCategories();
-    this.restaurant = {
-      ...this.restaurant,
-      ...this.initialRestaurant
-    }
+  },
+  watch: {
+    initialRestaurant(newValue) {
+      this.restaurant = {
+        ...this.restaurant,
+        ...newValue,
+      };
+    },
   },
 };
 </script>

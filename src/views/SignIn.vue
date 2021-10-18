@@ -88,18 +88,17 @@ export default {
 
         // 取得 API 請求後的資料
         const { data } = response;
-        console.log("response", response);
+        // console.log("response", response);
 
         // 設定判斷方式
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        
+
         // 將 token 存放在 localStorage 內
         localStorage.setItem("token", data.token);
         // 成功登入後轉址到餐廳首頁
         this.$router.push("/restaurants");
-
       } catch (error) {
         // 將密碼欄位清空
         this.password = "";
