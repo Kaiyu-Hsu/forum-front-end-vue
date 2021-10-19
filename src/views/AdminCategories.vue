@@ -126,15 +126,30 @@ export default {
         });
       }
     },
-    createCategory(name) {
-      // TODO: 透過 API 告知伺服器欲新增的餐廳類別...
-      // 將新的類別添加到陣列中
-      this.categories.push({
-        id: uuidv4(),
-        name: this.newCategoryName,
-      });
+    async createCategory() {
+      try {
+        const { data } = await adminAPI.categories.create({
+          name: this.newCategoryName,
+        });
 
-      this.newCategoryName = ""; // 清空原本欄位中的內容
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        // 將新的類別添加到陣列中
+        this.categories.push({
+          id: data.categoryId,
+          name: this.newCategoryName,
+        });
+
+        this.newCategoryName = ""; // 清空原本欄位中的內容
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法新增餐廳類別",
+        });
+      }
     },
     deleteCategory(categoryId) {
       this.categories = this.categories.filter(
