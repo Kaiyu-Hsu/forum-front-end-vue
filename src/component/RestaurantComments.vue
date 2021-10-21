@@ -13,12 +13,14 @@
           Delete
         </button>
         <h3>
-          <router-link :to="{ name:'user', params: { id: comment.User.id }}">
+          <router-link :to="{ name: 'user', params: { id: comment.User.id } }">
             {{ comment.User.name }}
-            </router-link>
+          </router-link>
         </h3>
         <p>{{ comment.text }}</p>
-        <footer class="blockquote-footer">{{ comment.createdAt | fromNow}}</footer>
+        <footer class="blockquote-footer">
+          {{ comment.createdAt | fromNow }}
+        </footer>
       </blockquote>
       <hr />
     </div>
@@ -26,19 +28,8 @@
 </template>
 
 <script>
-// import moment from 'moment'
-import { fromNowFilter } from '../utils/mixins'
-
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "管理者",
-    email: "root@example.com",
-    image: "https://i.pravatar.cc/300",
-    isAdmin: true,
-  },
-  isAuthenticated: true,
-};
+import { fromNowFilter } from "../utils/mixins";
+import { mapState } from "vuex";
 
 export default {
   props: {
@@ -47,25 +38,17 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      currentUser: dummyUser.currentUser,
-    };
-  },
   mixins: [fromNowFilter],
-//   filters: {
-//     fromNow(dateTime) {
-//         if(!dateTime) return '-'
-//         return moment(dateTime).fromNow()
-//     }
-//   },
   methods: {
     handleDeleteButtonClick(commentId) {
-      console.log('handleDeleteButtonClick', commentId)
+      console.log("handleDeleteButtonClick", commentId);
       // TODO: 請求 API 伺服器刪除 id 為 commentId 的評論
       // 觸發父層事件 - $emit( '事件名稱' , 傳遞的資料 )
-      this.$emit('after-delete-comment', commentId)
-    }
-  }
+      this.$emit("after-delete-comment", commentId);
+    },
+  },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
+  },
 };
 </script>
