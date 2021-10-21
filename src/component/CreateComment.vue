@@ -36,6 +36,7 @@ export default {
     async handleSubmit() {
       console.log("submit");
       try {
+        // TODO 當下可顯示，刷新後不見新增的評論
         const { data } = await commentsAPI.create({ text: this.text });
         console.log("data", data);
 

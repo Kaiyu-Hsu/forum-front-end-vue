@@ -30,6 +30,8 @@
 <script>
 import { fromNowFilter } from "../utils/mixins";
 import { mapState } from "vuex";
+import commentsAPI from "./../apis/comments";
+import { Toast } from "./../utils/helpers";
 
 export default {
   props: {
@@ -38,17 +40,43 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      comments: this.restaurantComments,
+    };
+  },
   mixins: [fromNowFilter],
   methods: {
-    handleDeleteButtonClick(commentId) {
-      console.log("handleDeleteButtonClick", commentId);
-      // TODO: 請求 API 伺服器刪除 id 為 commentId 的評論
-      // 觸發父層事件 - $emit( '事件名稱' , 傳遞的資料 )
-      this.$emit("after-delete-comment", commentId);
+    async handleDeleteButtonClick(commentId) {
+      console.log("delete commentId", commentId);
+      try {
+        const { data } = await commentsAPI.delete(commentId);
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        // 觸發父層事件 - $emit( '事件名稱' , 傳遞的資料 )
+        this.$emit("after-delete-comment", commentId);
+      } catch (error) {
+        console.error(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法刪除餐廳評論",
+        });
+      }
     },
   },
   computed: {
     ...mapState(["currentUser", "isAuthenticated"]),
   },
+  // watch: {
+  //   restaurantComments(newValue) {
+  //     this.comments = {
+  //       ...this.comments,
+  //       ...newValue,
+  //     };
+  //   },
+  // },
 };
 </script>
