@@ -2,7 +2,7 @@
   <div class="card mb-3">
     <div class="row no-gutters">
       <div class="col-md-4">
-        <img :src="profile.image  | emptyImage" width="300px" height="300px" />
+        <img :src="profile.image | emptyImage" width="300px" height="300px" />
       </div>
       <div class="col-md-8">
         <div class="card-body">
@@ -10,27 +10,28 @@
           <p class="card-text">{{ profile.email }}</p>
           <ul class="list-unstyled list-inline">
             <li>
-              <strong>{{ profile.comments.length }}</strong> 已評論餐廳
+              <strong>{{ profile.commentsLength }}</strong> 已評論餐廳
             </li>
             <li>
-              <strong>{{ profile.favoritedRestaurants.length }}</strong>
+              <strong>{{ profile.favoritedRestaurantsLength }}</strong>
               收藏的餐廳
             </li>
             <li>
-              <strong>{{ profile.followings.length }}</strong> followings
+              <strong>{{ profile.followingsLength }}</strong> followings
               (追蹤者)
             </li>
             <li>
-              <strong>{{ profile.followers.length }}</strong> followers (追隨者)
+              <strong>{{ profile.followersLength }}</strong> followers (追隨者)
             </li>
           </ul>
           <p>
             <template v-if="currentUser.isAdmin">
-              <router-link 
-              :to="{ name:'user-edit', params: { id: profile.id }}"
-              class="btn btn-primary">
+              <router-link
+                :to="{ name: 'user-edit', params: { id: profile.id } }"
+                class="btn btn-primary"
+              >
                 edit
-                </router-link>
+              </router-link>
             </template>
             <template v-else>
               <button
@@ -58,19 +59,8 @@
 </template>
 
 <script>
-import { emptyImageFilter } from '../utils/mixins'
-
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "root123",
-    email: "root@example.com",
-    image: "https://i.imgur.com/WMsHuNP.jpeg",
-    isAdmin: true,
-    // isAdmin: false,
-  },
-  isAuthenticated: true,
-}
+import { emptyImageFilter } from "../utils/mixins";
+import { mapState } from "vuex";
 
 export default {
   mixins: [emptyImageFilter],
@@ -83,7 +73,6 @@ export default {
   data() {
     return {
       profile: this.initialProfile,
-      currentUser: dummyUser.currentUser
     };
   },
   methods: {
@@ -99,6 +88,9 @@ export default {
         isFollowed: false,
       };
     },
+  },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
   },
 };
 </script>
