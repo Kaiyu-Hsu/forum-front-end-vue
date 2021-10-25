@@ -25,7 +25,7 @@
             </li>
           </ul>
           <p>
-            <template v-if="currentUser.isAdmin">
+            <template v-if="profile.id === currentUser.id">
               <router-link
                 :to="{ name: 'user-edit', params: { id: profile.id } }"
                 class="btn btn-primary"
@@ -91,6 +91,14 @@ export default {
   },
   computed: {
     ...mapState(["currentUser", "isAuthenticated"]),
+  },
+  watch: {
+    initialProfile(newValue) {
+      this.profile = {
+        ...this.profile,
+        ...newValue,
+      };
+    },
   },
 };
 </script>
