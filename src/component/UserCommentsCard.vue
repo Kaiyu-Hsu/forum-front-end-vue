@@ -17,7 +17,7 @@
 </template>
 
 <script>
-import { emptyImageFilter } from '../utils/mixins'
+import { emptyImageFilter } from "../utils/mixins";
 
 export default {
   mixins: [emptyImageFilter],
