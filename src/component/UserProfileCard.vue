@@ -35,8 +35,8 @@
             </template>
             <template v-else>
               <button
-                v-if="profile.isFollowed"
-                @click.stop.prevent="deleteFollowing"
+                v-if="isFollowed"
+                @click.stop.prevent="deleteFollowing(profile.id)"
                 type="submit"
                 class="btn btn-danger"
               >
@@ -44,7 +44,7 @@
               </button>
               <button
                 v-else
-                @click.stop.prevent="addFollowing"
+                @click.stop.prevent="addFollowing(profile.id)"
                 type="submit"
                 class="btn btn-primary"
               >
@@ -61,6 +61,8 @@
 <script>
 import { emptyImageFilter } from "../utils/mixins";
 import { mapState } from "vuex";
+import usersAPI from "./../apis/users";
+import { Toast } from "./../utils/helpers";
 
 export default {
   mixins: [emptyImageFilter],
@@ -69,24 +71,51 @@ export default {
       type: Object,
       required: true,
     },
+    initialIsFollowed: {
+      type: Boolean,
+      required: true,
+    },
   },
   data() {
     return {
       profile: this.initialProfile,
+      isFollowed: this.initialIsFollowed,
     };
   },
   methods: {
-    addFollowing() {
-      this.profile = {
-        ...this.profile,
-        isFollowed: true,
-      };
+    async addFollowing(id) {
+      try {
+        const { data } = await usersAPI.addFollowed({ id });
+        console.log("data", data);
+
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+
+        this.isFollowed = true;
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法追蹤此用戶",
+        });
+      }
     },
-    deleteFollowing() {
-      this.profile = {
-        ...this.profile,
-        isFollowed: false,
-      };
+    async deleteFollowing(id) {
+      try {
+        const { data } = await usersAPI.deleteFollowed({ id });
+        console.log("data", data);
+
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+
+        this.isFollowed = false;
+      } catch (error) {
+        Toast.fire({
+          icon: "error",
+          title: "無法取消追蹤此用戶",
+        });
+      }
     },
   },
   computed: {
@@ -98,6 +127,9 @@ export default {
         ...this.profile,
         ...newValue,
       };
+    },
+    initialIsFollowed(isFollowed) {
+      this.isFollowed = isFollowed;
     },
   },
 };
