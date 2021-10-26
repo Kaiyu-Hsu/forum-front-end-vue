@@ -2,7 +2,13 @@
   <div class="album py-5 bg-light">
     <div class="container">
       <!-- User profile Card -->
-      <UserProfileCard :initial-profile="profile" />
+      <UserProfileCard
+        :initial-profile="profile"
+        :initial-is-followed="isFollowed"
+        :current-user="currentUser"
+        @after-add-following="afterAddFollowing"
+        @after-delete-following="afterDeleteFollowing"
+      />
       <div class="row">
         <div class="col-md-4">
           <!-- User Following Card -->
@@ -33,6 +39,7 @@ import UserCommentsCard from "../component/UserCommentsCard.vue";
 import UserFavoritedRestaurantsCard from "../component/UserFavoritedRestaurantsCard.vue";
 import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
+import { mapState } from "vuex";
 
 export default {
   name: "User",
@@ -87,8 +94,10 @@ export default {
         this.followings = data.profile.Followings;
         this.followers = data.profile.Followers;
         this.favoritedRestaurants = data.profile.FavoritedRestaurants;
-        this.comments = data.profile.Comments;
-        // TODO if comment = ""
+        // 處理 comment.Restaurant 可能有空值的情況
+        this.comments = data.profile.Comments.filter(
+          (comment) => comment.Restaurant
+        );
       } catch (error) {
         console.error(error);
         Toast.fire({
@@ -97,16 +106,32 @@ export default {
         });
       }
     },
+    afterAddFollowing() {
+      this.isFollowed = true;
+      this.followersLength += 1;
+      this.followers.push({
+        id: this.currentUser.id,
+        image: this.currentUser.image,
+      });
+    },
+    afterDeleteFollowing() {
+      this.isFollowed = false;
+      this.followersLength -= 1;
+      this.followers = this.followers.filter(
+        (follower) => follower.id != this.currentUser.id
+      );
+    },
+  },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
   },
   beforeRouteUpdate(to, from, next) {
     const { id } = to.params;
     this.fetchUser(id);
-    console.log("beforeRouteUpdate", id);
     next();
   },
   created() {
     const { id } = this.$route.params;
-    console.log("fetchUser", id);
     this.fetchUser(id);
   },
 };

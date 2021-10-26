@@ -60,7 +60,6 @@
 
 <script>
 import { emptyImageFilter } from "../utils/mixins";
-import { mapState } from "vuex";
 import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
 
@@ -73,6 +72,10 @@ export default {
     },
     initialIsFollowed: {
       type: Boolean,
+      required: true,
+    },
+    currentUser: {
+      type: Object,
       required: true,
     },
   },
@@ -92,7 +95,7 @@ export default {
           throw new Error(data.message);
         }
 
-        this.isFollowed = true;
+        this.$emit("after-add-following");
       } catch (error) {
         Toast.fire({
           icon: "error",
@@ -109,7 +112,7 @@ export default {
           throw new Error(data.message);
         }
 
-        this.isFollowed = false;
+        this.$emit("after-delete-following");
       } catch (error) {
         Toast.fire({
           icon: "error",
@@ -117,9 +120,6 @@ export default {
         });
       }
     },
-  },
-  computed: {
-    ...mapState(["currentUser", "isAuthenticated"]),
   },
   watch: {
     initialProfile(newValue) {
