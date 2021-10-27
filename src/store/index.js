@@ -15,6 +15,7 @@ export default new Vuex.Store({
       isAdmin: false,
     },
     isAuthenticated: false, // 是否驗證過
+    token: "",
   },
   // 只限修改 state 的函式，commit
   mutations: {
@@ -26,12 +27,14 @@ export default new Vuex.Store({
       };
 
       state.isAuthenticated = true;
+      state.token = localStorage.getItem("token");
     },
     // 登出時把資料和 token 清空
     revokeAuthentication(state) {
       state.currentUser = {};
       state.isAuthenticated = false;
       localStorage.removeItem("token");
+      state.token = "";
     },
   },
   // 透過 api 請求資料，dispatch
@@ -51,6 +54,7 @@ export default new Vuex.Store({
         return true;
       } catch (error) {
         console.error(error.message);
+        commit("revokeAuthentication");
         return false;
       }
     },
