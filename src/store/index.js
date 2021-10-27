@@ -48,9 +48,10 @@ export default new Vuex.Store({
 
         commit("setCurrentUser", { id, name, email, image, isAdmin });
 
-        console.log("data", data);
+        return true;
       } catch (error) {
         console.error(error.message);
+        return false;
       }
     },
   },
