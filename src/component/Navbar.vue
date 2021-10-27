@@ -28,7 +28,10 @@
         </router-link>
         <template v-if="isAuthenticated">
           <!-- is user is login -->
-          <router-link to="#" class="text-white mr-3">
+          <router-link
+            :to="{ name: 'user-edit', params: { id: currentUser.id } }"
+            class="text-white mr-3"
+          >
             {{ currentUser.name || "使用者" }} 您好
           </router-link>
           <button
@@ -44,43 +47,11 @@
 </template>
 
 <script>
-// seed data
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: "管理者",
-    email: "root@example.com",
-    image: "https://i.pravatar.cc/300",
-    isAdmin: true,
-  },
-  isAuthenticated: true,
-};
+import { mapState } from "vuex";
 
 export default {
-  // Vue 會在沒有資料時使用此預設值
-  data() {
-    return {
-      currentUser: {
-        id: -1,
-        name: "",
-        email: "",
-        image: "",
-        isAdmin: false,
-      },
-      isAuthenticated: false,
-    };
-  },
-  methods: {
-    fetchUser() {
-      this.currentUser = {
-        ...this.currentUser,
-        ...dummyUser.currentUser,
-      };
-      this.isAuthenticated = dummyUser.isAuthenticated;
-    },
-  },
-  created() {
-    this.fetchUser();
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
   },
 };
 </script>

@@ -59,4 +59,16 @@ export default {
       });
     },
   },
+  users: {
+    get() {
+      return apiHelper.get(`/admin/users`, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+    },
+    change(userId) {
+      return apiHelper.put(`/admin/users/${userId}`, null, {
+        headers: { Authorization: `Bearer ${getToken()}` },
+      });
+    },
+  },
 };
