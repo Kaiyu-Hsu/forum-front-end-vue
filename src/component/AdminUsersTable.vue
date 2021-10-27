@@ -8,7 +8,7 @@
       <td>
         <button
           v-if="user.isAdmin"
-          @click.stop.prevent="changeToUser"
+          @click.stop.prevent="toggleUserRole(user.id)"
           type="button"
           class="btn btn-link"
         >
@@ -17,7 +17,7 @@
         <button
           v-else
           type="button"
-          @click.stop.prevent="changeToAdmin"
+          @click.stop.prevent="toggleUserRole(user.id)"
           class="btn btn-link"
         >
           set as admin
@@ -28,6 +28,10 @@
 </template>
 
 <script>
+import { Toast } from "./../utils/helpers";
+import adminAPI from "./../apis/admin";
+import { mapState } from "vuex";
+
 export default {
   props: {
     initialUser: {
@@ -41,18 +45,29 @@ export default {
     };
   },
   methods: {
-    changeToUser() {
-      this.user = {
-        ...this.user,
-        isAdmin: false,
-      };
+    async toggleUserRole(id) {
+      try {
+        const { data } = await adminAPI.users.change(id);
+
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+
+        this.user = {
+          ...this.user,
+          isAdmin: !this.user.isAdmin,
+        };
+      } catch (error) {
+        console.error(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法變更用戶權限",
+        });
+      }
     },
-    changeToAdmin() {
-      this.user = {
-        ...this.user,
-        isAdmin: true,
-      };
-    },
+  },
+  computed: {
+    ...mapState(["currentUser", "isAuthenticated"]),
   },
 };
 </script>
