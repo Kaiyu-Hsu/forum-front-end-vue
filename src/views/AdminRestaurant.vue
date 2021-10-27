@@ -42,33 +42,12 @@
 </template>
 
 <script>
-import { emptyImageFilter } from '../utils/mixins'
-
-const dummyData = {
-  restaurant: {
-    id: 4,
-    name: "Mckayla Hintz",
-    tel: "1-240-532-2429",
-    address: "167 Rogahn Mission",
-    opening_hours: "08:00",
-    description: "Impedit nesciunt ad id delectus magnam aspernatur fugit.",
-    image:
-      "https://loremflickr.com/320/240/restaurant,food/?random=42.58020446504014",
-    viewCounts: 46,
-    createdAt: "2021-07-05T09:58:39.000Z",
-    updatedAt: "2021-08-30T09:34:27.000Z",
-    CategoryId: 4,
-    Category: {
-      id: 4,
-      name: "墨西哥料理",
-      createdAt: "2021-07-05T09:58:39.000Z",
-      updatedAt: "2021-07-05T09:58:39.000Z",
-    },
-  },
-};
+import { emptyImageFilter } from "../utils/mixins";
+import adminAPI from "./../apis/admin";
+import { Toast } from "./../utils/helpers";
 
 export default {
-  name: 'AdminRestaurant',
+  name: "AdminRestaurant",
   mixins: [emptyImageFilter],
   data() {
     return {
@@ -85,25 +64,49 @@ export default {
     };
   },
   methods: {
-      fetchRestaurant(restaurantId) {
-          const { restaurant } = dummyData
-          const { id, name, tel, address, opening_hours: openingHours, description, image, Category } = restaurant
-          this.restaurant = {
-              ...restaurant,
-              id,
-              name,
-              tel,
-              address,
-              openingHours,
-              description,
-              image,
-              categoryName: Category ? Category.name : "未分類" // 避免有未分類的情況
-          }
+    async fetchRestaurant(restaurantId) {
+      try {
+        const { data } = await adminAPI.restaurants.getDetail({ restaurantId });
+        console.log(data);
+        const {
+          id,
+          name,
+          tel,
+          address,
+          opening_hours: openingHours,
+          description,
+          image,
+          Category,
+        } = data.restaurant;
+
+        this.restaurant = {
+          ...this.restaurant,
+          id,
+          name,
+          tel,
+          address,
+          openingHours,
+          description,
+          image,
+          categoryName: Category ? Category.name : "未分類", // 避免有未分類的情況
+        };
+      } catch (error) {
+        console.log("error", error);
+        Toast.fire({
+          icon: "warning",
+          title: "無法取得餐廳資料",
+        });
       }
+    },
   },
   created() {
-      const { id: restaurantId } = this.$route.params
-      return this.fetchRestaurant(restaurantId)
-  }
+    const { id: restaurantId } = this.$route.params;
+    return this.fetchRestaurant(restaurantId);
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id } = to.params;
+    this.fetchRestaurant(id);
+    next();
+  },
 };
 </script>

@@ -15,6 +15,10 @@
 
 <script>
 import { v4 as uuidv4 } from "uuid";
+import commentsAPI from "./../apis/comments";
+import { Toast } from "./../utils/helpers";
+import { mapState } from "vuex";
+
 export default {
   name: "CreateComment",
   props: {
@@ -29,17 +33,31 @@ export default {
     };
   },
   methods: {
-    handleSubmit() {
+    async handleSubmit() {
       console.log("submit");
-      // TODO: 向 API 發送 POST 請求
-      // 伺服器新增 Comment 成功後...
-      this.$emit("after-create-comment", {
-        commentId: uuidv4(), // 尚未串接 API 暫時使用隨機的 id
-        restaurantId: this.restaurantId,
-        text: this.text,
-      });
+      try {
+        // TODO 當下可顯示，刷新後不見新增的評論
+        const { data } = await commentsAPI.create({ text: this.text });
+        console.log("data", data);
 
-      this.text = ''  // 將表單內的資料清空
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+
+        this.$emit("after-create-comment", {
+          commentId: data.commentId,
+          restaurantId: this.restaurantId,
+          text: this.text,
+        });
+
+        this.text = "";
+      } catch (error) {
+        console.error(error);
+        Toast.fire({
+          icon: "error",
+          title: "無法新增餐廳評論",
+        });
+      }
     },
   },
 };
