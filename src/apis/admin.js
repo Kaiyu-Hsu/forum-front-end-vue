@@ -34,41 +34,27 @@ export default {
   },
   restaurants: {
     create({ formData }) {
-      return apiHelper.post(`/admin/restaurants`, formData, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
+      return apiHelper.post(`/admin/restaurants`, formData);
     },
     get() {
-      return apiHelper.get(`/admin/restaurants`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
+      return apiHelper.get(`/admin/restaurants`);
     },
     delete(restaurantId) {
-      return apiHelper.delete(`/admin/restaurants/${restaurantId}`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
+      return apiHelper.delete(`/admin/restaurants/${restaurantId}`);
     },
     getDetail({ restaurantId }) {
-      return apiHelper.get(`/admin/restaurants/${restaurantId}`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
+      return apiHelper.get(`/admin/restaurants/${restaurantId}`);
     },
     update({ restaurantId, formData }) {
-      return apiHelper.put(`/admin/restaurants/${restaurantId}`, formData, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
+      return apiHelper.put(`/admin/restaurants/${restaurantId}`, formData);
     },
   },
   users: {
     get() {
-      return apiHelper.get(`/admin/users`, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
+      return apiHelper.get(`/admin/users`);
     },
     change(userId) {
-      return apiHelper.put(`/admin/users/${userId}`, null, {
-        headers: { Authorization: `Bearer ${getToken()}` },
-      });
+      return apiHelper.put(`/admin/users/${userId}`, null);
     },
   },
 };

@@ -23,6 +23,10 @@
       :previous-page="previousPage"
       :next-page="nextPage"
     />
+
+    <div v-if="restaurants.length < 1">
+      此類別目前無餐廳類別資料
+    </div>
   </div>
 </template>
 
@@ -32,7 +36,7 @@ import RestaurantCard from "../component/RestaurantCard.vue";
 import RestaurantsNavPills from "../component/RestaurantsNavPills.vue";
 import RestaurantsPagination from "../component/RestaurantsPagination.vue";
 import restaurantsAPI from "../apis/restaurants.js";
-import { Toast } from './../utils/helpers'
+import { Toast } from "./../utils/helpers";
 
 export default {
   name: "Restaurants",
@@ -55,7 +59,7 @@ export default {
   },
   methods: {
     // 帶入參數 page 與 categoryId，呼叫 API 後取得 response
-    async fetchRestaurants({ queryPage, queryCategoryId  }) {
+    async fetchRestaurants({ queryPage, queryCategoryId }) {
       try {
         const response = await restaurantsAPI.getRestaurants({
           page: queryPage,
@@ -81,20 +85,19 @@ export default {
         this.totalPage = totalPage;
         this.previousPage = prev;
         this.nextPage = next;
-
       } catch (error) {
         console.log("error", error);
         Toast.fire({
-          icon: 'error',
-          title: '無法取得餐廳資料，請稍後再試'
-        })
+          icon: "error",
+          title: "無法取得餐廳資料，請稍後再試",
+        });
       }
     },
   },
   created() {
     // 以複製進來的網址來搜尋參數並渲染畫面
-    const { page = '', categoryId = '' } = this.$route.query
-    this.fetchRestaurants({ queryPage:page, queryCategoryId:categoryId })
+    const { page = "", categoryId = "" } = this.$route.query;
+    this.fetchRestaurants({ queryPage: page, queryCategoryId: categoryId });
     // 向伺服器請求第一頁且不分餐廳類別的資料
     this.fetchRestaurants({
       queryPage: "",
@@ -103,9 +106,9 @@ export default {
   },
   beforeRouteUpdate(to, from, next) {
     // 避免撈到 undefined 字串
-    const { page = '', categoryId = '' } = to.query
-    this.fetchRestaurants({ queryPage: page, queryCategoryId: categoryId })
-    next()
-  }
+    const { page = "", categoryId = "" } = to.query;
+    this.fetchRestaurants({ queryPage: page, queryCategoryId: categoryId });
+    next();
+  },
 };
 </script>
