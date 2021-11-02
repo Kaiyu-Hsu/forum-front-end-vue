@@ -83,7 +83,7 @@ export default {
     async addFavorite(restaurantId) {
       try {
         // 使用撰寫好的 addFavorite 方法去呼叫 API，並取得回傳內容
-        const { data } = await usersAPI.addFavorite({ restaurantId })
+        const { data } = await usersAPI.addFavorite({ restaurantId });
         // 若請求過程有錯，則進到錯誤處理
         if (data.status !== "success") {
           throw new Error(data.message);
@@ -98,17 +98,17 @@ export default {
           icon: "error",
           title: "無法將餐廳加入最愛，請稍後再試",
         });
-        console.log('error', error)
+        console.log("error", error);
       }
     },
     async deleteFavorite(restaurantId) {
       try {
-        const { data }  = await usersAPI.deleteFavorite({ restaurantId })
-        
+        const { data } = await usersAPI.deleteFavorite({ restaurantId });
+
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        
+
         this.restaurant = {
           ...this.restaurant,
           isFavorited: false,
@@ -118,22 +118,21 @@ export default {
           icon: "error",
           title: "無法將餐廳移除最愛，請稍後再試",
         });
-        console.log('error', error)
+        console.log("error", error);
       }
     },
     async addLiked(restaurantId) {
       try {
-        const { data } = await usersAPI.addLiked({ restaurantId })
+        const { data } = await usersAPI.addLiked({ restaurantId });
 
-        if( data.status !== "success" ) {
-          throw new Error(data.message)
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
 
         this.restaurant = {
-        ...this.restaurant,
-        isLiked: true,
+          ...this.restaurant,
+          isLiked: true,
         };
-
       } catch (error) {
         Toast.fire({
           icon: "error",
@@ -143,17 +142,16 @@ export default {
     },
     async deleteLiked(restaurantId) {
       try {
-        const { data } = await usersAPI.deleteLiked({ restaurantId })
+        const { data } = await usersAPI.deleteLiked({ restaurantId });
 
-        if( data.status !== "success" ) {
-          throw new Error(data.message)
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
 
         this.restaurant = {
-        ...this.restaurant,
-        isLiked: false,
+          ...this.restaurant,
+          isLiked: false,
         };
-
       } catch (error) {
         Toast.fire({
           icon: "error",
@@ -164,3 +162,34 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.badge.badge-secondary {
+  padding: 0;
+  margin: 8px 0;
+  color: #bd2333;
+  background-color: transparent;
+}
+
+.btn,
+.btn-border.btn:hover {
+  margin: 7px 14px 7px 0;
+}
+
+.card {
+  margin-bottom: 2rem !important;
+}
+.card-img-top {
+  background-color: #efefef;
+}
+
+.card-body {
+  padding: 17.5px;
+}
+
+.card-footer {
+  padding: 9px 17.5px;
+  border-color: rgb(232, 232, 232);
+  background: white;
+}
+</style>
