@@ -77,6 +77,7 @@ export default {
         this.userProfile.image = imageURL;
       }
     },
+    // TODO: 無法更改帳戶資料
     async handleSubmit(e) {
       // 預防漏填名稱
       if (this.userProfile.name.trim().length === 0) {
