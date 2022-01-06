@@ -1,6 +1,7 @@
 <template>
   <div class="album py-5 bg-light">
-    <div class="container">
+    <Spinner2 v-if="isLoading" />
+    <div class="container" v-else>
       <!-- User profile Card -->
       <UserProfileCard
         :initial-profile="profile"
@@ -37,6 +38,7 @@ import UserFollowingsCard from "../component/UserFollowingsCard.vue";
 import UserFollowersCard from "../component/UserFollowersCard.vue";
 import UserCommentsCard from "../component/UserCommentsCard.vue";
 import UserFavoritedRestaurantsCard from "../component/UserFavoritedRestaurantsCard.vue";
+import Spinner2 from "./../component/Spinner2.vue";
 import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
@@ -49,6 +51,7 @@ export default {
     UserFollowersCard,
     UserCommentsCard,
     UserFavoritedRestaurantsCard,
+    Spinner2,
   },
   data() {
     return {
@@ -67,12 +70,13 @@ export default {
       followers: [],
       followings: [],
       isFollowed: true,
+      isLoading: true,
     };
   },
   methods: {
     async fetchUser(userId) {
       try {
-        // TODO id:1 , get 503 疑似後端在維修連不上
+        // TODO id:1 , image: null, get 503
         const { data } = await usersAPI.get({ userId });
         console.log(data);
 
@@ -98,7 +102,9 @@ export default {
         this.comments = data.profile.Comments.filter(
           (comment) => comment.Restaurant
         );
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
         console.error(error);
         Toast.fire({
           icon: "error",

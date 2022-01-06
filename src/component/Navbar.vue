@@ -71,7 +71,7 @@ export default {
 
 nav.bg-dark {
   padding: 14px 16px;
-  background-color: #bd2333 !important;
+  /* background-color: #bd2333 !important; */
 }
 
 .navbar-brand {

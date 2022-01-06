@@ -1,8 +1,7 @@
 <template>
   <div class="container py-5">
     <NavTabs />
-    <Spinner v-if="isLoading" />
-
+    <Spinner2 v-if="isLoading" />
     <template v-else>
       <h1 class="mt-5">最新動態</h1>
       <hr />
@@ -26,7 +25,7 @@
 import NavTabs from "../component/NavTabs.vue";
 import NewestRestaurants from "../component/NewestRestaurants.vue";
 import NewestComments from "../component/NewestComments.vue";
-import Spinner from "./../component/Spinner.vue";
+import Spinner2 from "./../component/Spinner2.vue";
 import restaurantsAPI from "../apis/restaurants.js";
 import { Toast } from "./../utils/helpers";
 
@@ -36,7 +35,7 @@ export default {
     NavTabs,
     NewestRestaurants,
     NewestComments,
-    Spinner,
+    Spinner2,
   },
   data() {
     return {

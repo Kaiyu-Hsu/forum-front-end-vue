@@ -5,6 +5,8 @@
     <!-- 餐廳類別標籤 RestaurantsNavPills -->
     <RestaurantsNavPills :categories="categories" />
 
+    <Spinner2 v-if="isLoading" />
+
     <div class="row">
       <!-- 餐廳卡片 RestaurantCard-->
       <RestaurantCard
@@ -24,8 +26,22 @@
       :next-page="nextPage"
     />
 
-    <div v-if="restaurants.length < 1">
-      此類別目前無餐廳類別資料
+    <div v-if="!isLoading">
+      <!-- 此類別目前無餐廳類別資料 -->
+      <div v-if="restaurants.length < 1" class="card mb-4 col-md-6 col-lg-4">
+        <img
+          class="card-img-top"
+          src="https://i0.zi.org.tw/kocpc/2018/12/1543750676-fbf8657e3f8c73f3ee693c9bcc02399f.jpg"
+          alt="Card image cap"
+          width="286px"
+          height="180px"
+        />
+        <div class="card-body">
+          <p class="card-text title-wrap text-center">
+            此類別目前無餐廳類別資料
+          </p>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -35,6 +51,7 @@ import NavTabs from "../component/NavTabs.vue";
 import RestaurantCard from "../component/RestaurantCard.vue";
 import RestaurantsNavPills from "../component/RestaurantsNavPills.vue";
 import RestaurantsPagination from "../component/RestaurantsPagination.vue";
+import Spinner2 from "./../component/Spinner2.vue";
 import restaurantsAPI from "../apis/restaurants.js";
 import { Toast } from "./../utils/helpers";
 
@@ -45,6 +62,7 @@ export default {
     RestaurantCard,
     RestaurantsNavPills,
     RestaurantsPagination,
+    Spinner2,
   },
   data() {
     return {
@@ -55,6 +73,7 @@ export default {
       totalPage: [],
       previousPage: -1,
       nextPage: -1,
+      isLoading: true,
     };
   },
   methods: {
@@ -85,7 +104,10 @@ export default {
         this.totalPage = totalPage;
         this.previousPage = prev;
         this.nextPage = next;
+
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
         console.log("error", error);
         Toast.fire({
           icon: "error",
@@ -112,3 +134,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.card-body {
+  border-top: 1px solid rgb(232, 232, 232);
+}
+</style>

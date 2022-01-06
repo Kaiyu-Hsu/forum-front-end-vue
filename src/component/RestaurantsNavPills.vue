@@ -38,16 +38,16 @@ export default {
 .nav-pills .nav-link {
   margin-right: 7px;
   margin-bottom: 7px;
-  padding: 5px 10px 3px;
+  padding: 5px 10px 5px;
   color: #4d4d4d;
   border: 1px solid #a1a1a1;
-  transition: none;
 }
 
 .nav-pills .nav-link.active,
 .nav-pills .show > .nav-link {
   border-width: 2px;
-  border-color: #bd2333;
+  border-color: #4490e0;
+  color: #4490e0;
   background-color: transparent;
 }
 </style>

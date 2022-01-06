@@ -98,6 +98,11 @@ export default {
           throw new Error(data.message);
         }
 
+        Toast.fire({
+          icon: "success",
+          title: "成功新增到最愛",
+        });
+
         this.restaurant = {
           ...this.restaurant, // 保留餐廳內原有資料
           isFavorited: true,
@@ -106,7 +111,7 @@ export default {
         console.error(error);
         Toast.fire({
           icon: "error",
-          title: "無法新增到最愛",
+          title: "無法新增最愛",
         });
       }
     },
@@ -117,6 +122,11 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+
+        Toast.fire({
+          icon: "success",
+          title: "成功移除最愛",
+        });
 
         this.restaurant = {
           ...this.restaurant,
@@ -138,6 +148,11 @@ export default {
           throw new Error(data.message);
         }
 
+        Toast.fire({
+          icon: "success",
+          title: "成功按讚",
+        });
+
         this.restaurant = {
           ...this.restaurant,
           isLiked: true,
@@ -157,6 +172,11 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+
+        Toast.fire({
+          icon: "success",
+          title: "取消按讚",
+        });
 
         this.restaurant = {
           ...this.restaurant,
