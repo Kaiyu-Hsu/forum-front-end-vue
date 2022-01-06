@@ -1,8 +1,8 @@
 <template>
-  <div class="col-3">
-    <a href="#">
+  <div class="col-sm-6 col-md-3">
+    <router-link :to="{ name: 'user', params: { id: user.id } }">
       <img :src="user.image | emptyImage" width="140px" height="140px" />
-    </a>
+    </router-link>
     <h2>{{ user.name }}</h2>
     <span class="badge badge-secondary"
       >追蹤人數：{{ user.followerCount }}</span
@@ -55,12 +55,16 @@ export default {
           throw new Error(data.message);
         }
 
+        Toast.fire({
+          icon: "success",
+          title: "成功追蹤",
+        });
+
         this.user = {
           ...this.user,
           followerCount: this.user.followerCount + 1,
           isFollowed: true,
         };
-
       } catch (error) {
         console.log(error);
         Toast.fire({
@@ -77,12 +81,16 @@ export default {
           throw new Error(data.message);
         }
 
+        Toast.fire({
+          icon: "success",
+          title: "取消追蹤",
+        });
+
         this.user = {
           ...this.user,
           followerCount: this.user.followerCount - 1,
           isFollowed: false,
-        }
-        
+        };
       } catch (error) {
         console.log(error);
         Toast.fire({

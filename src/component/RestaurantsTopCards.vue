@@ -70,6 +70,11 @@ export default {
         const response = await usersAPI.addFavorite({ restaurantId });
         // console.log(response);
 
+        Toast.fire({
+          icon: "success",
+          title: "成功新增最愛",
+        });
+
         this.restaurant = {
           ...this.restaurant, // 保留餐廳內原有資料
           isFavorited: true,
@@ -85,6 +90,11 @@ export default {
     async deleteFavorite(restaurantId) {
       try {
         const response = await usersAPI.deleteFavorite({ restaurantId });
+
+        Toast.fire({
+          icon: "success",
+          title: "成功移除最愛",
+        });
 
         this.restaurant = {
           ...this.restaurant,

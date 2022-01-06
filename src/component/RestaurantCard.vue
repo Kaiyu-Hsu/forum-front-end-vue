@@ -94,6 +94,12 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+
+        Toast.fire({
+          icon: "success",
+          title: "成功新增最愛",
+        });
+
         // 請求成功的話，改變 Vue 內的資料狀態
         this.restaurant = {
           ...this.restaurant,
@@ -118,6 +124,11 @@ export default {
           throw new Error(data.message);
         }
 
+        Toast.fire({
+          icon: "success",
+          title: "成功移除最愛",
+        });
+
         this.restaurant = {
           ...this.restaurant,
           isFavorited: false,
@@ -141,6 +152,11 @@ export default {
           throw new Error(data.message);
         }
 
+        Toast.fire({
+          icon: "success",
+          title: "成功按讚",
+        });
+
         this.restaurant = {
           ...this.restaurant,
           isLiked: true,
@@ -162,6 +178,11 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
+
+        Toast.fire({
+          icon: "success",
+          title: "取消按讚",
+        });
 
         this.restaurant = {
           ...this.restaurant,

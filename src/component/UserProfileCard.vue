@@ -95,6 +95,11 @@ export default {
           throw new Error(data.message);
         }
 
+        Toast.fire({
+          icon: "success",
+          title: "成功追蹤",
+        });
+
         this.$emit("after-add-following");
       } catch (error) {
         Toast.fire({
@@ -111,6 +116,11 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
+
+        Toast.fire({
+          icon: "success",
+          title: "取消追蹤",
+        });
 
         this.$emit("after-delete-following");
       } catch (error) {
