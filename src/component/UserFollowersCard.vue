@@ -13,11 +13,11 @@
           :src="
             follower.image
               ? follower.image
-              : 'http://pic.616pic.com/ys_bnew_img/00/04/49/vO9e6yZC89.jpg'
+              : 'https://pica.zhimg.com/80/v2-6afa72220d29f045c15217aa6b275808_720w.jpg?source=1940ef5c'
           "
           width="60"
           height="60"
-          class="avatar"
+          class="avatar m-2"
         />
       </router-link>
     </div>

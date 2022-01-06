@@ -9,7 +9,7 @@
           :src="comment.Restaurant.image | emptyImage"
           width="60"
           height="60"
-          class="avatar"
+          class="avatar m-1"
         />
       </router-link>
     </div>

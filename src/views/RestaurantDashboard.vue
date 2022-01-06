@@ -22,7 +22,7 @@
       <li>瀏覽次數： {{ restaurant.viewCounts }}</li>
     </ul>
 
-    <button type="button" class="btn btn-link" @click="$router.back()">
+    <button type="button" class="btn btn-primary" @click="$router.back()">
       回上一頁
     </button>
   </div>
